@@ -1,27 +1,49 @@
 # 🚀 Plataforma de Gestión Dinámica de Microservicios
 
 ## 📝 Descripción del Proyecto
-[cite_start]Este proyecto consiste en una plataforma diseñada para la administración dinámica de microservicios utilizando contenedores Docker[cite: 59, 61]. [cite_start]A través de un dashboard web, los usuarios pueden crear, listar, habilitar, deshabilitar y eliminar microservicios en tiempo real[cite: 62, 79]. 
+[cite_start]Esta plataforma permite a los desarrolladores crear, administrar y eliminar microservicios de forma instantánea[cite: 4, 21]. [cite_start]A través de un Dashboard Web, se puede escribir código fuente, elegir un lenguaje (Python o Node.js) y el sistema se encarga de empaquetar, construir y desplegar un contenedor Docker independiente para ese servicio[cite: 8, 18, 19, 23, 27, 28].
 
-[cite_start]Cada microservicio se define como una aplicación independiente empaquetada en su propio contenedor, que expone un endpoint HTTP y retorna respuestas en formato JSON[cite: 65, 66, 67, 68].
+### Objetivos del Proyecto:
+* [cite_start]**Creación Dinámica:** Generar servicios sin intervención manual en el servidor, pegando el código en el dashboard[cite: 11, 18].
+* [cite_start]**Soporte Multi-lenguaje:** Compatibilidad con Python y Node.js[cite: 19].
+* [cite_start]**Administración Visual:** Panel para listar, habilitar, deshabilitar y eliminar contenedores[cite: 21].
+* [cite_start]**Aislamiento Total:** Cada microservicio vive en su propio entorno aislado y se ejecuta en su propio contenedor Docker[cite: 8, 30].
+
+## 👥 Integrantes del Grupo
+* [Nombre Integrante 1]
+* [Nombre Integrante 2]
+* [Nombre Integrante 3]
+* [Nombre Integrante 4]
 
 ## 🏗️ Arquitectura del Sistema
-La solución implementa un modelo de **Docker-out-of-Docker (DooD)**, permitiendo que el contenedor de la plataforma gestione otros contenedores en el host.
+El sistema utiliza una arquitectura **DooD (Docker-out-of-Docker)**. El contenedor de la plataforma se comunica con el motor de Docker del sistema anfitrión a través del archivo `/var/run/docker.sock` para desplegar automáticamente los contenedores de los microservicios.
 
-1.  **Dashboard (Frontend):** Interfaz desarrollada en HTML/JS para la gestión de servicios.
-2.  **Orquestador (Backend):** Servidor Flask en Python 3.11 que interactúa con el Docker Engine a través del socket de Unix (`/var/run/docker.sock`).
-3.  [cite_start]**Docker Engine:** Motor encargado de construir las imágenes y desplegar los contenedores de forma aislada[cite: 66, 85, 86].
+```mermaid
+graph TD
+    subgraph Usuario
+        U[Navegador Web / Dashboard]
+    end
 
-> **[INSERTE AQUÍ SU DIAGRAMA DE ARQUITECTURA]**
+    subgraph "Contenedor: Plataforma (Puerto 3000)"
+        D[Dashboard HTML/JS]
+        B[Backend Flask - main.py]
+    end
 
-## 🛠️ Tecnologías Utilizadas
-* **Lenguaje Base:** Python 3.11 (Flask).
-* [cite_start]**Contenerización:** Docker y Docker Compose[cite: 61].
-* **Lenguajes Soportados:** Python y Node.js.
-* **Gestión de Red:** Exposición automática de puertos dinámicos para cada servicio.
+    subgraph "Infraestructura Host"
+        S[Docker Socket]
+        DE[Docker Engine]
+    end
 
-## 🚀 Instalación y Despliegue
-[cite_start]Para levantar la plataforma completa, asegúrese de tener Docker instalado y ejecute el siguiente comando en la raíz del proyecto[cite: 90, 91]:
+    subgraph "Microservicios Creados"
+        M1[Contenedor: Python Service]
+        M2[Contenedor: Node.js Service]
+    end
 
-```bash
-docker-compose up
+    U -->|1. Envía Código| D
+    D -->|2. Solicitud API| B
+    B -->|3. Comandos Docker| S
+    S -->|4. Construcción/Ejecución| DE
+    DE -->|5. Despliegue| M1
+    DE -->|5. Despliegue| M2
+    U -.->|6. Consumo JSON| M1
+    U -.->|6. Consumo JSON| M2
