@@ -1,6 +1,6 @@
 # 🚀 Plataforma de Gestión Dinámica de Microservicios
 
-## 📝 Descripción Extendida
+## 📝 Descripción
 Esta plataforma es una solución integral para la **orquestación dinámica de microservicios** basada en contenedores. El sistema permite que un desarrollador pase de tener código fuente "plano" a un microservicio productivo en segundos, sin configuración manual de infraestructura.
 
 ### ¿Qué define a nuestros microservicios?
